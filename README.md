@@ -5,11 +5,11 @@ This is a visualization library that can easily visualize large `.dat` files obt
 # Dependecies:
 The visualization engine uses OpenGL/Python based packages. These packages and others are listed below:
 
-- `glm`
-- `pygame`
-- `moderngl`
-- `matplotlib`
-- `PIL`
-- `asyncio`
-- `numpy`
-- `f90nml`
+- `PyGLM`        `VERSION=2.7.1`
+- `pygame`       `VERSION=2.5.2`
+- `ModernGL`     `VERSION=5.10.0`
+- `matplotlib` 
+- `Pillow`          `VERSION=10.2.0`
+- `asyncio`   
+- `numpy`    
+- `f90nml`       `VERSION=1.4.4`
