@@ -7,6 +7,8 @@ import time
 from PIL import Image
 import matplotlib as mpl
 import matplotlib.pyplot as plt
+import datreader as dat
+
 default_timer = time.time
 data, var, min_val,max_val, cmap, var_func = None, None, None, None, None, None
 
@@ -138,7 +140,7 @@ def make_colorbar(label_text, norm, tf_func):
     width, height = fig.canvas.get_width_height()
     rgba_buffer = np.frombuffer(fig.canvas.buffer_rgba(), dtype=np.uint8).reshape((height, width, 4))
     image = Image.fromarray(rgba_buffer, 'RGBA')
-    image.show()
+    plt.close(fig)
     return image
 
 class VisTool:
@@ -241,20 +243,17 @@ class VisTool:
         b = norm_var(a[:, 0], self.min_max_var)
         a[:,0:4], c = transferFunction(b, self.tf_func)  
         self.vertex_data = [a[self.grid_tri_indices].reshape(-1,10), self.pos_scene, self.scale]
-        sorted_indices = np.argsort(b)
-        a = a[:,0:4]
-        b = b[sorted_indices]
-        a = a[sorted_indices]
-        c = c[sorted_indices]
-        plt.plot(b,c[:,0],c='r')
-        plt.plot(b,c[:,1],c='g')
-        plt.plot(b,c[:,2],c='b')
-        plt.plot(b,a[:,0],'--',c='r')
-        plt.plot(b,a[:,1],'--',c='g')
-        plt.plot(b,a[:,2],'--',c='b')
+        # sorted_indices = np.argsort(b)
+        # a = a[:,0:4]
+        # b = b[sorted_indices]
+        # a = a[sorted_indices]
+        # c = c[sorted_indices]
+        # plt.plot(b,a[:,0],'--',c='r')
+        # plt.plot(b,a[:,1],'--',c='g')
+        # plt.plot(b,a[:,2],'--',c='b')
 
-        plt.plot(b,a[:,3],c='k')
-        plt.show()
+        # plt.plot(b,a[:,3],c='k')
+        # plt.show()
         self.colorbar = make_colorbar(label_cb,mpl.colors.Normalize(vmin=self.min_max_var[0], vmax=self.min_max_var[1]), self.tf_func)
 
 
@@ -300,7 +299,7 @@ class VisTool:
             return all_indices
         return single_grid_indices
 
-    def plot3D(self, objects=[], show_screen=True, camPos=(15, 10, 15)):
+    def app(self, objects=[], show_screen=True, camPos=(15, 10, 15)):
         self.objects = objects
         object_data=[self.vertex_data]
 
@@ -335,7 +334,7 @@ class VisTool:
         self.app.save_image(foldername, filename, format=format)
 
 
-    def plot(self, change_data_func, start_data=0, N_data=0, save_image=False, foldername="frames/", format=".png"):
+    def plot(self, change_data_func, start_data=0, end_data=0, save_image=False, foldername="frames/", format=".png"):
         if self.app.show_screen == True:
             async def update_func():
                 i=start_data
@@ -384,9 +383,9 @@ class VisTool:
             # Run the main function
             asyncio.run(main())
 
-        elif N_data != 0:
+        elif end_data != 0:
             i=start_data
-            while i<N_data+start_data:
+            while i<end_data+start_data:
                 tstart = default_timer()
                 self.app.get_time()
                 self.app.camera.update()
