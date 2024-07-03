@@ -18,7 +18,7 @@ def plane_grid_values(args):
     ix, iy, iz = pos + offset
     r, theta, phi = convert_to_spherical(ix, iy, iz)
     flat_idx = data.coord2flat([r, theta, phi])
-    return [r, theta, phi, var_func( r, theta, phi, flat_idx),0,0,0, nnormal[1], nnormal[2], nnormal[0], iy, iz, ix,]
+    return [r, theta, phi, var_func( r, theta, phi, var[:,flat_idx]),0,0,0, nnormal[1], nnormal[2], nnormal[0], iy, iz, ix,]
 
 def volume_grid_values(args):
     i, j, k, Nw, Nh, Nd, Dw, Dh, Dd, pos, nup, nright, nnormal = args
@@ -30,7 +30,7 @@ def volume_grid_values(args):
     r, theta, phi = convert_to_spherical(ix, iy, iz)
     flat_idx = data.coord2flat([r, theta, phi])
   
-    return [r, theta, phi, var_func( r, theta, phi, flat_idx),0,0,0, nnormal[1], nnormal[2], nnormal[0], iy, iz, ix,]
+    return [r, theta, phi, var_func( r, theta, phi, var[:,flat_idx]),0,0,0, nnormal[1], nnormal[2], nnormal[0], iy, iz, ix,]
 
 def sphere_grid_values(args):
     i, j, pos, radius, dtheta, dphi = args
@@ -44,13 +44,13 @@ def sphere_grid_values(args):
 
     r, theta, phi = convert_to_spherical(ix, iy, iz)
     flat_idx = data.coord2flat([r, theta, phi])
-    return [r, theta, phi,var_func(r, theta, phi, flat_idx),0,0,0,n_iy,n_iz,n_ix,iy,iz,ix]
+    return [r, theta, phi,var_func(r, theta, phi, var[:,flat_idx]),0,0,0,n_iy,n_iz,n_ix,iy,iz,ix]
 
 
 def recompute_grid(args):
     r,theta,phi = args
     flat_idx=data.coord2flat([r, theta, phi])
-    return var_func( r, theta, phi, flat_idx)
+    return var_func( r, theta, phi, var[:,flat_idx])
 
 
 def convert_to_spherical(X,Y,Z):
